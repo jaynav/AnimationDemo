@@ -4,6 +4,10 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Button;
+import android.widget.LinearLayout;
 
 
 public class MainActivity extends Activity {
@@ -12,6 +16,35 @@ public class MainActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        LinearLayout container = (LinearLayout) findViewById(R.id.container);
+
+        //making  the Bview
+        final BasicV derView = new BasicV(this);
+        derView.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,LinearLayout.LayoutParams.MATCH_PARENT));
+
+        container.addView(derView);
+
+        // change this button
+        Button btn = (Button) findViewById(R.id.button1);
+        btn.setOnClickListener(new OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+
+                derView.increm();
+
+                //dummy test
+                try
+                {
+                 Thread.sleep(3000);
+                }
+                catch (InterruptedException e)
+                {
+                    derView.increm();
+                }
+            }
+        });
     }
 
 
@@ -51,6 +84,7 @@ public class MainActivity extends Activity {
 //on save goes here
   @Override
   public void onSaveInstanceState(Bundle outSaveState)
+
   {
       super.onSaveInstanceState(outSaveState);
   }
