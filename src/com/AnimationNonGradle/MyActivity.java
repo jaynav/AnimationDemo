@@ -1,6 +1,7 @@
 package com.AnimationNonGradle;
 
         import android.app.Activity;
+        import android.content.Intent;
         import android.os.Bundle;
         import android.view.Menu;
         import android.view.MenuItem;
@@ -86,5 +87,20 @@ public class MyActivity extends Activity {
     {
         super.onDestroy();
     }
+
+
+    ////////////////////////////////////////click methods
+
+    public void startMonkeyAni (View dahView)
+    {
+        Intent dahIntent =  new Intent(this,TestAnimation.class);
+        startActivity(dahIntent);
+
+    }
+
+
+
+
+
 
 }
