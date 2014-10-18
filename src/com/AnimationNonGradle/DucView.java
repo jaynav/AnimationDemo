@@ -17,16 +17,52 @@ public class DucView extends View {
         //set background
         setBackgroundResource(R.drawable.cropit);
 
+        derDuc = scale(BitmapFactory.decodeResource(testAnimation.getResources(),R.drawable.theduck),150);
+        derAlt = scale(BitmapFactory.decodeResource(testAnimation.getResources(),R.drawable.nottheduck),150);
+        derX = derY= 51;
+
+
     }
 
-
+    /**
+     *
+     * @param derBase bitmap image
+     * @param derWidth width of image to be given
+     * @return returns a scaled imaged based on the bitmap  to the width
+     */
     public Bitmap scale(Bitmap derBase, float derWidth)
-    {return null;// change from null
+    {
+        float scale = derWidth/derBase.getWidth();
+
+        int scaleWidth = derBase.getWidth()*(int)scale;
+        int scaleHeight =derBase.getHeight()*(int)scale;
+        return Bitmap.createScaledBitmap(derBase,scaleWidth, scaleHeight,false);
 
     }
 
+    /**
+     * draw on canvas of custom view depending on click, may show alternative view
+     * @param derScreen screen of phone
+     */
     public void onDraw(Canvas derScreen)
-    {}
+    {
+        if(gotClicked)
+        {
+            derScreen.drawBitmap(derAlt,derX,derY,null);
+        }
+        else
+        {
+            derScreen.drawBitmap(derDuc,derX,derY,null);
+        }
+
+    }
+
+    /**
+     * notification of touch event
+     * @param dahEvent current touch event
+     * @return return true if event happened
+     */
+    @Override
     public boolean onTouchEvent(MotionEvent dahEvent)
     {return true; // change this too
 
@@ -47,6 +83,7 @@ public class DucView extends View {
     {
 
     }
+///////////////////////////////////////////////////////////////////
     //for image
     private Bitmap derDuc;
     private Bitmap derAlt;
@@ -62,7 +99,7 @@ public class DucView extends View {
     private float trackX;
     private float trackY;
     //click only
-    private boolean gotClick;
+    private boolean gotClicked;
     private long clickTime;
     // current time
     private long updater;
