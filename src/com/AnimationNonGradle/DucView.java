@@ -10,7 +10,12 @@ import android.view.MotionEvent;
 /**
  * Created by DerpPC on 9/9/2014.
  */
+
 public class DucView extends View {
+    /**
+     * the extended view constructor for duck
+     * @param testAnimation the parent context view from test animation.java needed in this extension view
+     */
     public DucView(Context testAnimation)
     {
         super(testAnimation);
@@ -125,9 +130,13 @@ public class DucView extends View {
 
 
 
-        return true; // change this too
+        return true;
 
     }
+
+    /**
+     * how many times per second to move the image across the screen
+     */
     private Runnable updateDerState= new Runnable() {
 
         public void run()
@@ -135,15 +144,52 @@ public class DucView extends View {
 
         }
     };
-    public void wrapper(){}
-    public void randomDirection(){}
+
+    /**
+     * wraps image from edge to edge
+     */
+    public void wrapper()
+    {
+        if(derX< 0 )
+        {
+            derX += getWidth();
+        }
+        if (derY<0)
+        {
+            derY += getWidth();
+        }
+        if(derX >= getWidth())
+        {
+            derX -= getWidth();
+        }
+        if(derY >= getWidth())
+        {
+            derY -=getWidth();
+        }
+    }
+
+    /**
+     * changes direction at random
+     */
+    public void randomDirection()
+    {
+
+        trackPerSecX = (float)(Math.random()*600-299);
+        trackperSecY = (float)(Math.random()*600-299);
+    }
     public void start()
     {
+        updater = System.currentTimeMillis();
+        randomDirection();
+        getHandler().removeCallbacks(updateDerState);
+        getHandler().post(updateDerState);
+        derMoto = true;
     }
 
     public void stop()
     {
-
+       getHandler().removeCallbacks(updateDerState);
+       derMoto = false;
     }
 ///////////////////////////////////////////////////////////////////
     //for image
