@@ -141,6 +141,24 @@ public class DucView extends View {
 
         public void run()
         {
+            long rightnow = System.currentTimeMillis();
+            float elaspedTime =(rightnow -updater)/1000;
+            updater = rightnow;
+            derX = trackPerSecX * elaspedTime;
+            derY = trackperSecY * elaspedTime;
+            wrapper();
+            invalidate();
+
+            // true for 1 sec
+            if(gotClicked)
+            {
+                if(rightnow - clickTime >=1000)
+                {
+                 gotClicked = false;
+                }
+            }
+            //run again in 21ms
+            getHandler().postDelayed(this, 21);
 
         }
     };
