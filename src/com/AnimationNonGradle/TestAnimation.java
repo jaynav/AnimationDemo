@@ -101,4 +101,13 @@ public class TestAnimation extends Activity {
 
     }
 
+    public void finishedActivity(View finishActivity)
+    {
+        //use this with startActivityForResult();
+       // onActivityResult(); to get result
+        //setResult();
+
+        finish();
+
+    }
 }

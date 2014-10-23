@@ -32,15 +32,15 @@ public class DucView extends View {
     /**
      *
      * @param derBase bitmap image
-     * @param derWidth width of image to be given
-     * @return returns a scaled imaged based on the bitmap  to the width
+     * @param givenWidth width of image to be given
+     * @return returns a scaled imaged based on the bitmap  to the given width
      */
-    public Bitmap scale(Bitmap derBase, float derWidth)
+    public Bitmap scale(Bitmap derBase, float givenWidth)
     {
-        float scale = derWidth/derBase.getWidth();
+        float scale = givenWidth/derBase.getWidth();
 
-        int scaleWidth = derBase.getWidth()*(int)scale;
-        int scaleHeight =derBase.getHeight()*(int)scale;
+        int scaleWidth = (int)(derBase.getWidth()* scale);
+        int scaleHeight =(int)(derBase.getHeight()*scale);
         return Bitmap.createScaledBitmap(derBase,scaleWidth, scaleHeight,false);
 
     }
@@ -142,10 +142,11 @@ public class DucView extends View {
         public void run()
         {
             long rightnow = System.currentTimeMillis();
-            float elaspedTime =(rightnow -updater)/1000;
+            float elaspedTime =(rightnow -updater)/1000.0f;
             updater = rightnow;
-            derX = trackPerSecX * elaspedTime;
-            derY = trackperSecY * elaspedTime;
+           //bug must add last elapsed time to current time. if not it will stay in the same spot
+            derX += trackPerSecX * elaspedTime;
+            derY += trackperSecY * elaspedTime;
             wrapper();
             invalidate();
 
@@ -157,8 +158,9 @@ public class DucView extends View {
                  gotClicked = false;
                 }
             }
-            //run again in 21ms
-            getHandler().postDelayed(this, 21);
+            //run again in 5ms
+            getHandler().postDelayed(this, 5);
+
 
         }
     };
@@ -167,22 +169,22 @@ public class DucView extends View {
      * wraps image from edge to edge
      */
     public void wrapper()
-    {
+    { // make sure this is correct bugs hide here and image will stay in one spot
         if(derX< 0 )
         {
             derX += getWidth();
         }
         if (derY<0)
         {
-            derY += getWidth();
+            derY += getHeight();
         }
         if(derX >= getWidth())
         {
             derX -= getWidth();
         }
-        if(derY >= getWidth())
+        if(derY >= getHeight())
         {
-            derY -=getWidth();
+            derY -=getHeight();
         }
     }
 

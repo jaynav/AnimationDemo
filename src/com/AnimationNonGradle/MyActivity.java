@@ -10,6 +10,11 @@ package com.AnimationNonGradle;
         import android.widget.LinearLayout;
 
 public class MyActivity extends Activity {
+
+    /*
+    by default the constructor opens up with the extended by of basic view.
+    to open up duck view, it opens a second activity
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
