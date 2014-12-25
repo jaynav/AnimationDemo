@@ -6,6 +6,8 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.view.MotionEvent;
+import changeToast.*;
+
 
 /**
  * Created by DerpPC on 9/9/2014.
@@ -53,7 +55,12 @@ public class DucView extends View {
     {
         if(gotClicked)
         {
+
+
             derScreen.drawBitmap(derAlt,derX,derY,null);
+            randomDirection();
+
+
         }
         else
         {
@@ -83,7 +90,10 @@ public class DucView extends View {
                 {
                     clickTime = System.currentTimeMillis();
                     gotClicked = true;
+                    QPopup.makeText(conx, Counter.increase(), QPopup.LENGTH_SHORT).show();
+
                     //redraw
+
                     invalidate();
 
                 }
@@ -194,16 +204,18 @@ public class DucView extends View {
     public void randomDirection()
     {
 
-        trackPerSecX = (float)(Math.random()*600-299);
-        trackperSecY = (float)(Math.random()*600-299);
+        trackPerSecX = (float)(Math.random()*600-200);
+        trackperSecY = (float)(Math.random()*600-200);
     }
-    public void start()
+    public void start(Context cont)
     {
+        conx = cont;
         updater = System.currentTimeMillis();
         randomDirection();
         getHandler().removeCallbacks(updateDerState);
         getHandler().post(updateDerState);
         derMoto = true;
+
     }
 
     public void stop()
@@ -212,6 +224,7 @@ public class DucView extends View {
        derMoto = false;
     }
 ///////////////////////////////////////////////////////////////////
+    private Context conx;
     //for image
     private Bitmap derDuc;
     private Bitmap derAlt;
@@ -231,4 +244,6 @@ public class DucView extends View {
     private long clickTime;
     // current time
     private long updater;
+
+
 }

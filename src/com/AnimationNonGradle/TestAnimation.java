@@ -1,6 +1,7 @@
 package com.AnimationNonGradle;
 
 import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -92,7 +93,9 @@ public class TestAnimation extends Activity {
 
     public void monitorStart(View derView)
     {
-        duckview.start();
+        Context cont = getBaseContext();
+        duckview.start(cont);
+
 
     }
     public void monitorStop(View derView)
@@ -100,6 +103,7 @@ public class TestAnimation extends Activity {
         duckview.stop();
 
     }
+
 
     public void finishedActivity(View finishActivity)
     {
