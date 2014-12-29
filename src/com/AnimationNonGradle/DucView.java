@@ -135,14 +135,100 @@ public class DucView extends View {
                 lastDragX = onTEventX;
                 lastDragY = onTEventY;
             }
+
+
+            /*
+            // finger drag optimized version only redraw the part that moves
+			// Compute delta of gesture, apply that to the model.
+			else if (action == MotionEvent.ACTION_MOVE && mDragging) {
+				// Compute delta
+				float deltX = onTEventX - lastDragX;
+				float deltY = onTEventY - lastDragY;
+
+				// Not-optimized strategy:
+				// invalidate();
+
+				 //Rather than invalidate the entire view // compute just the area of pixels to redraw.
+                //must import android graphics.rect
+				// 1. Compute rect of the pre-move. .
+				Rect rect = new Rect((int)derX, (int)derY, (int)derX + derDuck.getWidth() + 1, (int)derY + derDuck.getHeight() + 1);
+				invalidate(rect);
+
+				// 2. invalidate again after move
+
+				rect.offset((int)deltX, (int)deltY);
+				invalidate(rect);
+
+				// Apply that delta t
+				derX += deltX;
+				derY += deltY;
+
+				// Store lastX/lastY for next time.
+				lastDragX = onTEventX;
+				lastDragY = onTEventY;
+
+            * */
         }
 
-
+ /* to do: add a pause and resume in order to stop the handeler from running use pause() and resume()
+       must also  set dermoto to pause. need to preserve the value that needs to take over when resume is called
+       use bundle
+        */
 
 
         return true;
 
     }
+
+    //kill and recreate cycle needs to be handled as well
+      /*
+      /**
+	 * View save-code for kill/recreate case. Note that this is similar but different
+	 * from the activity onSaveInstaneState() code.
+	 * This method and the resume below are sent automatically by the system for the
+	 * kill/recreate case. We need to save any mXXX variables we want to preserve.
+	 * Result of this code is: monkey could be motoring, but when it goes through
+	 * a kill/recreate cycle, it keeps the same position and speed and keeps motoring.
+
+    @Override
+    protected Parcelable onSaveInstanceState() {
+        System.err.println("save");
+
+        // 1. Make Bundle, save mXXX vars we want to preserve.
+        Bundle bundle = new Bundle();
+        bundle.putFloat("x", derX);
+        bundle.putFloat("y", derY);
+        bundle.putFloat("dx", lastDragX);
+        bundle.putFloat("dy", lastDragY);
+        bundle.putBoolean("motoring", derMoto);
+        // not saving "clicked"
+
+        // 2. Also call super class, and save whatever
+        // it returns.
+        Parcelable s = super.onSaveInstanceState();
+        bundle.putParcelable("super", s);
+
+        return bundle;
+    }
+*/
+
+    /** Restore from kill/recreate cycle.
+    @Override
+    protected void onRestoreInstanceState(Parcelable state) {
+        System.err.println("restore");
+
+        // This gets passed whatever we make above, so it should be a Bundle.
+        Bundle bundle = (Bundle) state;
+        derX = bundle.getFloat("x");
+        derY = bundle.getFloat("y");
+        lastDragX = bundle.getFloat("dx");
+        lastDragY = bundle.getFloat("dy");
+        derMoto = bundle.getBoolean("motoring");
+        // mClicked we'll leave as false on resume
+
+        super.onRestoreInstanceState(bundle.getParcelable("super"));
+       */
+
 
     /**
      * how many times per second to move the image across the screen
