@@ -159,7 +159,7 @@ public class DucView extends View {
 				rect.offset((int)deltX, (int)deltY);
 				invalidate(rect);
 
-				// Apply that delta t
+				// Apply that delta
 				derX += deltX;
 				derY += deltY;
 
@@ -182,13 +182,7 @@ public class DucView extends View {
 
     //kill and recreate cycle needs to be handled as well
       /*
-      /**
-	 * View save-code for kill/recreate case. Note that this is similar but different
-	 * from the activity onSaveInstaneState() code.
-	 * This method and the resume below are sent automatically by the system for the
-	 * kill/recreate case. We need to save any mXXX variables we want to preserve.
-	 * Result of this code is: monkey could be motoring, but when it goes through
-	 * a kill/recreate cycle, it keeps the same position and speed and keeps motoring.
+       when it goes through a kill/recreate cycle, it keeps the same position and speed and keeps dermoto.
 
     @Override
     protected Parcelable onSaveInstanceState() {
