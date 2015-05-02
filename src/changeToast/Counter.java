@@ -18,7 +18,7 @@ public class Counter
 
 
     //for final count once you stop
-    public int getDuck()
+    public static int getDuck()
     {
         return duckCount;
     }

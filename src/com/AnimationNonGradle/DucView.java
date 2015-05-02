@@ -1,11 +1,15 @@
 package com.AnimationNonGradle;
 
 import android.content.Context;
+import android.view.GestureDetector;
 import android.view.View;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.view.MotionEvent;
+import android.support.v4.view.GestureDetectorCompat;
+import android.widget.Toast;
+
 import changeToast.*;
 
 
@@ -13,11 +17,13 @@ import changeToast.*;
  * Created by DerpPC on 9/9/2014.
  */
 
-public class DucView extends View {
+public class DucView extends View implements GestureDetector.OnGestureListener{
     /**
      * the extended view constructor for duck
      * @param testAnimation the parent context view from test animation.java needed in this extension view
      */
+
+    private GestureDetectorCompat  detectorM;
     public DucView(Context testAnimation)
     {
         super(testAnimation);
@@ -27,6 +33,8 @@ public class DucView extends View {
         derDuc = scale(BitmapFactory.decodeResource(testAnimation.getResources(),R.drawable.theduck),150);
         derAlt = scale(BitmapFactory.decodeResource(testAnimation.getResources(),R.drawable.nottheduck),150);
         derX = derY= 51;
+        detectorM = new GestureDetectorCompat(conx,this);
+        detectorM.setIsLongpressEnabled(true);
 
 
     }
@@ -69,6 +77,93 @@ public class DucView extends View {
 
     }
 
+
+    /**
+     * Notified when a tap occurs with the down {@link android.view.MotionEvent}
+     * that triggered it. This will be triggered immediately for
+     * every down event. All other events should be preceded by this.
+     *
+     * @param e The down motion event.
+     */
+    @Override
+    public boolean onDown(MotionEvent e)
+    {
+        //must be true or the other gestures won't work
+        return true;
+    }
+
+    /**
+     * The user has performed a down {@link android.view.MotionEvent} and not performed
+     * a move or up yet. This event is commonly used to provide visual
+     * feedback to the user to let them know that their action has been
+     * recognized i.e. highlight an element.
+     *
+     * @param e The down motion event
+     */
+    @Override
+    public void onShowPress(MotionEvent e) {
+
+    }
+
+    /**
+     * Notified when a tap occurs with the up {@link android.view.MotionEvent}
+     * that triggered it.
+     *
+     * @param e The up motion event that completed the first tap
+     * @return true if the event is consumed, else false
+     */
+    @Override
+    public boolean onSingleTapUp(MotionEvent e) {
+        return false;
+    }
+
+    /**
+     * Notified when a scroll occurs with the initial on down {@link android.view.MotionEvent} and the
+     * current move {@link android.view.MotionEvent}. The distance in x and y is also supplied for
+     * convenience.
+     *
+     * @param e1        The first down motion event that started the scrolling.
+     * @param e2        The move motion event that triggered the current onScroll.
+     * @param distanceX The distance along the X axis that has been scrolled since the last
+     *                  call to onScroll. This is NOT the distance between {@code e1}
+     *                  and {@code e2}.
+     * @param distanceY The distance along the Y axis that has been scrolled since the last
+     *                  call to onScroll. This is NOT the distance between {@code e1}
+     *                  and {@code e2}.
+     * @return true if the event is consumed, else false
+     */
+    @Override
+    public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
+        return false;
+    }
+
+    @Override
+    public void onLongPress(MotionEvent dahEvent)
+    {
+
+        Toast.makeText(conx,"on long press",Toast.LENGTH_LONG).show();
+        Toast.makeText(conx,Counter.getDuck() +"were killed", Toast.LENGTH_LONG).show();
+
+    }
+
+    /**
+     * Notified of a fling event when it occurs with the initial on down {@link android.view.MotionEvent}
+     * and the matching up {@link android.view.MotionEvent}. The calculated velocity is supplied along
+     * the x and y axis in pixels per second.
+     *
+     * @param e1        The first down motion event that started the fling.
+     * @param e2        The move motion event that triggered the current onFling.
+     * @param velocityX The velocity of this fling measured in pixels per second
+     *                  along the x axis.
+     * @param velocityY The velocity of this fling measured in pixels per second
+     *                  along the y axis.
+     * @return true if the event is consumed, else false
+     */
+    @Override
+    public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
+        return false;
+    }
+
     /**
      * notification of touch event
      * @param dahEvent current touch event
@@ -80,8 +175,8 @@ public class DucView extends View {
         float onTEventX =dahEvent.getX();
         float onTEventY =dahEvent.getY();
         int action = dahEvent.getAction();
-
-
+        this.detectorM.onTouchEvent(dahEvent);
+        //if true/running
         if(derMoto)
         {
             if(action == MotionEvent.ACTION_DOWN)
@@ -99,7 +194,7 @@ public class DucView extends View {
                 }
             }
         }
-        else
+        else //if not running yet duck
         {
             if(action == MotionEvent.ACTION_DOWN)
             {
