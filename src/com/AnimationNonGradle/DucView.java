@@ -1,25 +1,15 @@
 package com.AnimationNonGradle;
 
-import android.content.Context;
-import android.view.GestureDetector;
-import android.view.View;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Canvas;
-import android.view.MotionEvent;
-import android.support.v4.view.GestureDetectorCompat;
-import android.widget.Toast;
+import android.content.Context; import android.view.GestureDetector;
+import android.view.View; import android.graphics.Bitmap;
+import android.graphics.BitmapFactory; import android.graphics.Canvas;
+import android.view.MotionEvent; import android.support.v4.view.GestureDetectorCompat;
+import android.widget.Toast; import changeToast.*;
 
-import changeToast.*;
-
-
-/**
- * Created by DerpPC on 9/9/2014.
- */
+/** Created by DerpPC on 9/9/2014.*/
 
 public class DucView extends View implements GestureDetector.OnGestureListener{
-    /**
-     * the extended view constructor for duck
+    /** the extended view constructor for duck
      * @param testAnimation the parent context view from test animation.java needed in this extension view
      */
 
@@ -30,18 +20,17 @@ public class DucView extends View implements GestureDetector.OnGestureListener{
         //set background
         setBackgroundResource(R.drawable.cropit);
 
-        derDuc = scale(BitmapFactory.decodeResource(testAnimation.getResources(),R.drawable.theduck),150);
+        derDuck2 = derDuc = scale(BitmapFactory.decodeResource(testAnimation.getResources(),R.drawable.theduck),150);
         derAlt = scale(BitmapFactory.decodeResource(testAnimation.getResources(),R.drawable.nottheduck),150);
         derX = derY= 51;
+        secondDuckX = secondDuckY = 110;
         detectorM = new GestureDetectorCompat(conx,this);
         detectorM.setIsLongpressEnabled(true);
 
 
     }
 
-    /**
-     *
-     * @param derBase bitmap image
+    /** @param derBase bitmap image
      * @param givenWidth width of image to be given
      * @return returns a scaled imaged based on the bitmap  to the given width
      */
@@ -55,31 +44,27 @@ public class DucView extends View implements GestureDetector.OnGestureListener{
 
     }
 
-    /**
-     * draw on canvas of custom view depending on click, may show alternative view
+    /** draw on canvas of custom view depending on click, may show alternative view
      * @param derScreen screen of phone
      */
     public void onDraw(Canvas derScreen)
     {
         if(gotClicked)
         {
-
-
             derScreen.drawBitmap(derAlt,derX,derY,null);
             randomDirection();
-
-
         }
         else
         {
             derScreen.drawBitmap(derDuc,derX,derY,null);
+            if(drawme == true)
+            {
+                derScreen.drawBitmap(derDuck2,secondDuckX,secondDuckY, null);
+            }
         }
-
     }
 
-
-    /**
-     * Notified when a tap occurs with the down {@link android.view.MotionEvent}
+    /** Notified when a tap occurs with the down {@link android.view.MotionEvent}
      * that triggered it. This will be triggered immediately for
      * every down event. All other events should be preceded by this.
      *
@@ -87,8 +72,7 @@ public class DucView extends View implements GestureDetector.OnGestureListener{
      */
     @Override
     public boolean onDown(MotionEvent e)
-    {
-        //must be true or the other gestures won't work
+    {//must be true or the other gestures won't work
         return true;
     }
 
@@ -102,7 +86,6 @@ public class DucView extends View implements GestureDetector.OnGestureListener{
      */
     @Override
     public void onShowPress(MotionEvent e) {
-
     }
 
     /**
@@ -140,10 +123,8 @@ public class DucView extends View implements GestureDetector.OnGestureListener{
     @Override
     public void onLongPress(MotionEvent dahEvent)
     {
-
         Toast.makeText(conx,"on long press",Toast.LENGTH_LONG).show();
-        Toast.makeText(conx,Counter.getDuck() +"were killed", Toast.LENGTH_LONG).show();
-
+        isLong = true;
     }
 
     /**
@@ -181,16 +162,14 @@ public class DucView extends View implements GestureDetector.OnGestureListener{
         {
             if(action == MotionEvent.ACTION_DOWN)
             {
-                if(derX <= onTEventX && derX + derDuc.getWidth() > onTEventX && derY <= onTEventY && derY+ derDuc.getHeight() > onTEventY)
+                if(derX <= onTEventX && derX + derDuc.getWidth() > onTEventX && derY <= onTEventY && derY+ derDuc.getHeight() > onTEventY ||
+                        secondDuckX <= onTEventX && secondDuckX + derDuck2.getWidth() > onTEventX && secondDuckY <= onTEventY && secondDuckY+ derDuck2.getHeight() > onTEventY )
                 {
                     clickTime = System.currentTimeMillis();
                     gotClicked = true;
-                    QPopup.makeText(conx, Counter.increase(), QPopup.LENGTH_SHORT).show();
-
+                    QPopup.makeText(conx, Counter.increase()+ "   killed", QPopup.LENGTH_SHORT).show();
                     //redraw
-
                     invalidate();
-
                 }
             }
         }
@@ -203,17 +182,19 @@ public class DucView extends View implements GestureDetector.OnGestureListener{
                     lastDragX= onTEventX;
                     lastDragY= onTEventY;
                     derDrag = true;
-
                 }
                 else // missing duck out of screen
                 {
                     derX= onTEventX - derDuc.getWidth()/2;
                     derY = onTEventY - derDuc.getHeight()/2;
+                    if(drawme)
+                    {
+                        secondDuckX = onTEventX - derDuck2.getWidth() / 2;
+                        secondDuckY = onTEventY - derDuck2.getWidth() / 2;
+                    }
                    // redraw
                     invalidate();
-
                 }
-
             }
             //finger drag
             else if(action == MotionEvent.ACTION_MOVE && derDrag)
@@ -224,14 +205,17 @@ public class DucView extends View implements GestureDetector.OnGestureListener{
                 //apply delta
                 derX += deltX;
                 derY += deltY;
+                if(drawme)
+                {
+                    secondDuckX += deltX;
+                    secondDuckY += deltY;
+                }
                 //redraw new location
                 invalidate();
                 //store current location
                 lastDragX = onTEventX;
                 lastDragY = onTEventY;
             }
-
-
             /*
             // finger drag optimized version only redraw the part that moves
 			// Compute delta of gesture, apply that to the model.
@@ -239,21 +223,18 @@ public class DucView extends View implements GestureDetector.OnGestureListener{
 				// Compute delta
 				float deltX = onTEventX - lastDragX;
 				float deltY = onTEventY - lastDragY;
-
 				// Not-optimized strategy:
 				// invalidate();
-
 				 //Rather than invalidate the entire view // compute just the area of pixels to redraw.
                 //must import android graphics.rect
+
 				// 1. Compute rect of the pre-move. .
 				Rect rect = new Rect((int)derX, (int)derY, (int)derX + derDuck.getWidth() + 1, (int)derY + derDuck.getHeight() + 1);
 				invalidate(rect);
 
 				// 2. invalidate again after move
-
 				rect.offset((int)deltX, (int)deltY);
 				invalidate(rect);
-
 				// Apply that delta
 				derX += deltX;
 				derY += deltY;
@@ -261,18 +242,13 @@ public class DucView extends View implements GestureDetector.OnGestureListener{
 				// Store lastX/lastY for next time.
 				lastDragX = onTEventX;
 				lastDragY = onTEventY;
-
             * */
         }
-
- /* to do: add a pause and resume in order to stop the handeler from running use pause() and resume()
+ /* to do: add a pause and resume in order to stop the handler from running use pause() and resume()
        must also  set dermoto to pause. need to preserve the value that needs to take over when resume is called
        use bundle
         */
-
-
         return true;
-
     }
 
     //kill and recreate cycle needs to be handled as well
@@ -318,12 +294,11 @@ public class DucView extends View implements GestureDetector.OnGestureListener{
         super.onRestoreInstanceState(bundle.getParcelable("super"));
        */
 
-
     /**
      * how many times per second to move the image across the screen
      */
-    private Runnable updateDerState= new Runnable() {
-
+    private Runnable updateDerState= new Runnable()
+    {
         public void run()
         {
             long rightnow = System.currentTimeMillis();
@@ -332,9 +307,15 @@ public class DucView extends View implements GestureDetector.OnGestureListener{
            //bug must add last elapsed time to current time. if not it will stay in the same spot
             derX += trackPerSecX * elaspedTime;
             derY += trackperSecY * elaspedTime;
+
+            if(Counter.getDuck() ==10 |isLong == true)
+            {
+                secondDuckX += (trackPerSecX *Math.random()) * elaspedTime;
+                secondDuckY += (trackperSecY *Math.random())* elaspedTime;
+                drawme = true;
+            }
             wrapper();
             invalidate();
-
             // true for 1 sec
             if(gotClicked)
             {
@@ -345,8 +326,6 @@ public class DucView extends View implements GestureDetector.OnGestureListener{
             }
             //run again in 5ms
             getHandler().postDelayed(this, 5);
-
-
         }
     };
 
@@ -371,14 +350,31 @@ public class DucView extends View implements GestureDetector.OnGestureListener{
         {
             derY -=getHeight();
         }
+        if(drawme)
+        {
+            if(secondDuckX< 0 )
+            {
+                derX += getWidth();
+            }
+            if (secondDuckY<0)
+            {
+                derY += getHeight();
+            }
+            if(secondDuckX >= getWidth())
+            {
+                secondDuckX -= getWidth();
+            }
+            if(secondDuckY >= getHeight())
+            {
+                secondDuckY -=getHeight();
+            }
+        }
     }
-
     /**
      * changes direction at random
      */
     public void randomDirection()
     {
-
         trackPerSecX = (float)(Math.random()*600-200);
         trackperSecY = (float)(Math.random()*600-200);
     }
@@ -390,7 +386,6 @@ public class DucView extends View implements GestureDetector.OnGestureListener{
         getHandler().removeCallbacks(updateDerState);
         getHandler().post(updateDerState);
         derMoto = true;
-
     }
 
     public void stop()
@@ -401,24 +396,20 @@ public class DucView extends View implements GestureDetector.OnGestureListener{
 ///////////////////////////////////////////////////////////////////
     private Context conx;
     //for image
-    private Bitmap derDuc;
-    private Bitmap derAlt;
+    private Bitmap derDuc, derDuck2, derAlt;
     //where it starts
-    private float derX;
-    private float derY;
+    private float derX, secondDuckX, derY, secondDuckY;
     // click drag
     private boolean derDrag;
-    private float lastDragX;
-    private float lastDragY;
+    private float lastDragX, lastDragY;
     // kept track with timer
     private boolean derMoto;
-    private float trackPerSecX;
-    private float trackperSecY;
+    private float trackPerSecX, trackperSecY;
     //click only
     private boolean gotClicked;
     private long clickTime;
     // current time
     private long updater;
-
-
+    //second image validator
+    private boolean isLong, drawme;
 }

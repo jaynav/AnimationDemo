@@ -19,5 +19,4 @@ public class QPopup extends Toast {
         super(context);
     }
 
-
 }
