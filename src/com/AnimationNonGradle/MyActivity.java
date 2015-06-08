@@ -2,6 +2,7 @@ package com.AnimationNonGradle;
 
         import android.app.Activity;
         import android.content.Intent;
+        import android.content.SharedPreferences;
         import android.os.Bundle;
         import android.view.Menu;
         import android.view.MenuItem;
@@ -56,14 +57,50 @@ public class MyActivity extends Activity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item)
     {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-        if (id == R.id.action_settings) {
-            return true;
+        // Handle action bar item clicks here.
+
+       switch(item.getItemId())
+       {
+           case R.id.action_settings:
+               selectImageNotFromGallary(1);
+               return true;
+           case R.id.action_alter:
+               selectImageNotFromGallary(2);
+               return true;
+
+        default:
+            return super.onOptionsItemSelected(item);
+       }
+
+
+    }
+
+//may change this code to select an image from gallery browser
+    // to access gallery use intent.settype("/image/*").setAction(Intent.action_get_Content)
+    // then startActivityForResult(intent.createChooser(intent, getstring(),1);
+    // then on onActivityResult(request, result, intent data).... if resultcode= ok and if requestcode =1,
+    // get the uri location of data.getdata
+    // also if implementing on custom view and using actionbar, make sure to import view.Menu.
+    // with custom view, it does not automatically use the actionbar from the main activity
+    private void selectImageNotFromGallary(int i)
+    {
+        int val;
+        switch (i)
+        {
+
+            case 1:
+                val = R.drawable.theduck;
+                break;
+            case 2:
+                val = R.drawable.angus;
+                break;
+            default:
+                val = R.drawable.theduck;
         }
-        return super.onOptionsItemSelected(item);
+
+        SharedPreferences prefer = getSharedPreferences("changeDefalut", 0);
+        SharedPreferences.Editor edi = prefer.edit();
+        edi.putInt("whichImage",val).commit();
     }
 
     //on resume goes here

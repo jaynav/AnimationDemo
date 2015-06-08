@@ -17,11 +17,12 @@ public class DucView extends View implements GestureDetector.OnGestureListener{
     public DucView(Context testAnimation)
     {
         super(testAnimation);
+
         //set background
         setBackgroundResource(R.drawable.cropit);
 
-        derDuck2 = derDuc = scale(BitmapFactory.decodeResource(testAnimation.getResources(),R.drawable.theduck),150);
-        derAlt = scale(BitmapFactory.decodeResource(testAnimation.getResources(),R.drawable.nottheduck),150);
+        derDuck2 = derDuc = scale(SelecImage.getPref(testAnimation),SelecImage.getSize());
+        derAlt = scale(SelecImage.getAlt(testAnimation),SelecImage.getSize());
         derX = derY= 51;
         secondDuckX = secondDuckY = 110;
         detectorM = new GestureDetectorCompat(conx,this);
@@ -56,10 +57,10 @@ public class DucView extends View implements GestureDetector.OnGestureListener{
         }
         else
         {
-            derScreen.drawBitmap(derDuc,derX,derY,null);
-            if(drawme == true)
+            derScreen.drawBitmap(derDuc, derX, derY, null);
+            if (drawme == true)
             {
-                derScreen.drawBitmap(derDuck2,secondDuckX,secondDuckY, null);
+                    derScreen.drawBitmap(derDuck2, secondDuckX, secondDuckY, null);
             }
         }
     }
@@ -75,7 +76,6 @@ public class DucView extends View implements GestureDetector.OnGestureListener{
     {//must be true or the other gestures won't work
         return true;
     }
-
     /**
      * The user has performed a down {@link android.view.MotionEvent} and not performed
      * a move or up yet. This event is commonly used to provide visual

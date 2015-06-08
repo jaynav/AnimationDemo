@@ -13,6 +13,7 @@
             </intent-filter>
         </activity>
 
-       <activity android:name=".TestAnimation" android:label="MonkeyAnimation"/>
+       <activity android:name=".TestAnimation"
+                 android:label="MonkeyAnimation"/>
     </application>
 </manifest>
